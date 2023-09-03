@@ -23,12 +23,18 @@ public class ReviewEntity {
     @Column(name = "agencyid", nullable = false)
     private Long agencyId;
     @Basic
-    @Min(value = 1)
-    @Max(value = 5)
+    @Min(value = 1, message = "El valor minimo de una reseña es 1.")
+    @Max(value = 5, message = "El valor minimo de una reseña es 5.")
     @Column(name = "reviewscore", nullable = false)
     private int reviewScore;
     @Basic
     @Column(name = "reviewcomment", nullable = true, length = -1)
     private String reviewComment;
 
+    public ReviewEntity(Long userId, Long agencyId, int reviewScore, String reviewComment) {
+        this.userId = userId;
+        this.agencyId = agencyId;
+        this.reviewScore = reviewScore;
+        this.reviewComment = reviewComment;
+    }
 }

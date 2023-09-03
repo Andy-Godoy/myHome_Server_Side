@@ -27,12 +27,7 @@ public class ReviewService {
         if(reviewRepository.findReviewEntityByAgencyIdAndUserId(agencyId, userId)!=null){
            throw new ResponseStatusException(HttpStatus.FORBIDDEN, CommonConstants.FORBIDDEN_REVIEW_ALREDY_SAVED);
         }
-        ReviewEntity newReview = new ReviewEntity();
-        newReview.setAgencyId(agencyId);
-        newReview.setUserId(userId);
-        newReview.setReviewScore(body.getReviewScore());
-        newReview.setReviewComment(body.getReviewComment());
-
+        ReviewEntity newReview = new ReviewEntity(userId, agencyId, body.getReviewScore(), body.getReviewComment());
         return reviewRepository.save(newReview);
 
     }

@@ -14,15 +14,20 @@ public class AgencyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "agencyid", nullable = false)
-    private int agencyid;
+    private Long agencyId;
     @Basic
     @Column(name = "userid", nullable = false)
-    private int userid;
+    private Long userId;
     @Basic
     @Column(name = "agencyname", nullable = true, length = 200)
-    private String agencyname;
+    private String agencyName;
     @Basic
     @Column(name = "agencyemail", nullable = true, length = 100)
-    private String agencyemail;
+    private String agencyEmail;
 
+    public AgencyEntity(Long userId, String agencyName, String agencyEmail) {
+        this.userId = userId;
+        this.agencyName = agencyName;
+        this.agencyEmail = agencyEmail;
+    }
 }
