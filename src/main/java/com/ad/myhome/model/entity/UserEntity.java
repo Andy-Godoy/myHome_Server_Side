@@ -1,5 +1,7 @@
 package com.ad.myhome.model.entity;
 
+import com.ad.myhome.utils.enums.CurrencyType;
+import com.ad.myhome.utils.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,18 +16,20 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "userid", nullable = false)
-    private int userid;
+    private int userId;
     @Basic
     @Column(name = "username", nullable = true, length = 100)
-    private String username;
+    private String userName;
     @Basic
     @Column(name = "useremail", nullable = false, length = 100)
-    private String useremail;
+    private String userEmail;
     @Basic
     @Column(name = "userpassword", nullable = true, length = 20)
-    private String userpassword;
-    @Basic
+    private String userPassword;
+    @Enumerated(EnumType.STRING)
     @Column(name = "usercurrencypreference", nullable = false, length = 3)
-    private String usercurrencypreference;
-
+    private CurrencyType userCurrencyPreference;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "userrole", nullable = false)
+    private RoleType userRole;
 }

@@ -1,10 +1,11 @@
 package com.ad.myhome.controller;
 
 import com.ad.myhome.model.dto.AgencyDTO;
+import com.ad.myhome.model.dto.AgencyResponseDTO;
 import com.ad.myhome.model.entity.AgencyEntity;
 import com.ad.myhome.service.AgencyService;
-import com.ad.myhome.utils.CommonConstants;
-import com.ad.myhome.utils.CommonFunctions;
+import com.ad.myhome.utils.common.CommonConstants;
+import com.ad.myhome.utils.common.CommonFunctions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,7 +47,7 @@ public class AgencyController {
     }
 
     @GetMapping(value="/{agencyId}")
-    public AgencyEntity getOneAgency(@PathVariable(name = "agencyId") Long agencyId){
+    public AgencyResponseDTO getOneAgency(@PathVariable(name = "agencyId") Long agencyId){
         return agencyService.getOneAgency(agencyId);
     }
 
@@ -61,12 +62,12 @@ public class AgencyController {
                     CommonConstants.BADREQUEST_MISSINGPARAMETER
             );
         }
-        return agencyService.UpdateOneAgency(agencyId, userId, body);
+        return agencyService.updateOneAgency(agencyId, userId, body);
     }
 
     @DeleteMapping(value = "/{agencyId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void DeleteOneAgency(
+    public void deleteOneAgency(
             @PathVariable(name = "agencyId") Long agencyId,
             @RequestParam(name = "userId") Long userId) throws ResponseStatusException {
         if(CommonFunctions.isMissing(userId) || CommonFunctions.isMissing(agencyId)) {
@@ -75,7 +76,7 @@ public class AgencyController {
                     CommonConstants.BADREQUEST_MISSINGPARAMETER
             );
         }
-        agencyService.DeleteOneAgency(agencyId, userId);
+        agencyService.deleteOneAgency(agencyId, userId);
     }
 
 }

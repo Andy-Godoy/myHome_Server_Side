@@ -1,9 +1,11 @@
 package com.ad.myhome.service;
 
 import com.ad.myhome.model.dto.AgencyDTO;
+import com.ad.myhome.model.dto.AgencyResponseDTO;
 import com.ad.myhome.model.entity.AgencyEntity;
 import com.ad.myhome.repository.AgencyRepository;
-import com.ad.myhome.utils.CommonConstants;
+import com.ad.myhome.repository.ReviewRepository;
+import com.ad.myhome.utils.common.CommonConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,17 +16,21 @@ import java.util.List;
 public class AgencyService {
 
     private final AgencyRepository agencyRepository;
+    private final ReviewRepository reviewRepository;
 
-    public AgencyService(AgencyRepository agencyRepository) {
+    public AgencyService(AgencyRepository agencyRepository, ReviewRepository reviewRepository) {
         this.agencyRepository = agencyRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public List<AgencyEntity> getAgencies(Long userId) {
         return agencyRepository.findAgencyEntitiesByUserId(userId);
     }
 
-    public AgencyEntity getOneAgency(Long agencyId){
-        return agencyRepository.findAgencyEntityByAgencyId(agencyId);
+    public AgencyResponseDTO getOneAgency(Long agencyId){
+        Float agencyRating = reviewRepository.getAverageScoreByAgencyId(agencyId);
+        AgencyEntity agency = agencyRepository.findAgencyEntityByAgencyId(agencyId);
+        return new AgencyResponseDTO(agency.getAgencyId(), agency.getUserId(), agency.getAgencyName(), agency.getAgencyEmail(), agencyRating);
     }
 
     public AgencyEntity saveOneAgency(Long userId, AgencyDTO body){
@@ -38,7 +44,7 @@ public class AgencyService {
         return agencyRepository.save(newAgency);
     }
 
-    public AgencyEntity UpdateOneAgency(Long agencyId, Long userId, AgencyDTO body) {
+    public AgencyEntity updateOneAgency(Long agencyId, Long userId, AgencyDTO body) {
         AgencyEntity agency = agencyRepository.findAgencyEntityByAgencyId(agencyId);
         if(agency==null){
             throw new ResponseStatusException(
@@ -57,7 +63,7 @@ public class AgencyService {
         return agencyRepository.save(agency);
     }
 
-    public void DeleteOneAgency(Long agencyId, Long userId) {
+    public void deleteOneAgency(Long agencyId, Long userId) {
         AgencyEntity agency = agencyRepository.findAgencyEntityByAgencyId(agencyId);
         if(agency==null){
             throw new ResponseStatusException(

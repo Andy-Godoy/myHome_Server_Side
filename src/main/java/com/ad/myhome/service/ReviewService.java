@@ -3,7 +3,7 @@ package com.ad.myhome.service;
 import com.ad.myhome.model.dto.ReviewDTO;
 import com.ad.myhome.model.entity.ReviewEntity;
 import com.ad.myhome.repository.ReviewRepository;
-import com.ad.myhome.utils.CommonConstants;
+import com.ad.myhome.utils.common.CommonConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
