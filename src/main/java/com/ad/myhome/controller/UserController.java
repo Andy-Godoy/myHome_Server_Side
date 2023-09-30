@@ -1,5 +1,6 @@
 package com.ad.myhome.controller;
 
+import com.ad.myhome.model.dto.BasicCredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.service.UserService;
@@ -42,6 +43,12 @@ public class UserController {
             );
         }
         return userService.updateUser(userId, body);
+    }
+
+    @PostMapping(value = "")
+    public UserDTO registerUser(
+            @RequestBody BasicCredentialsDTO body) {
+        return userService.registerUser(body);
     }
 
     @DeleteMapping(value = "/{userId}")
