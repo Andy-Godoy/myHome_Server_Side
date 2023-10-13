@@ -1,6 +1,7 @@
 package com.ad.myhome.controller;
 
 import com.ad.myhome.model.dto.BasicCredentialsDTO;
+import com.ad.myhome.model.dto.CredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.service.UserService;
@@ -30,6 +31,12 @@ public class UserController {
     public UserDTO getUser(
             @PathVariable(name = "userId", required = true) Long userId) throws ResponseStatusException {
         return userService.getOneUser(userId);
+    }
+
+    @PostMapping(value = "/logins")
+    public UserDTO logins(
+            @RequestBody CredentialsDTO body) {
+        return userService.logins(body);
     }
 
     @PutMapping(value = "/{userId}")

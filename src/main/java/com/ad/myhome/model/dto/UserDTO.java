@@ -25,4 +25,11 @@ public class UserDTO {
         this.userCurrencyPreference = user.getUserCurrencyPreference();
         this.userRole = user.getUserRole();
     }
+
+    // Constructor alternativo que solo incluye userId, userRole y userCurrencyPreference
+    public UserDTO(int userId, CurrencyType userCurrencyPreference, RoleType userRole) {
+        this.userId = userId;
+        this.userCurrencyPreference = userCurrencyPreference;
+        this.userRole = userRole;
+    }
 }
