@@ -1,7 +1,7 @@
 package com.ad.myhome.controller;
 
 import com.ad.myhome.model.dto.BasicCredentialsDTO;
-import com.ad.myhome.model.dto.CredentialsDTO;
+import com.ad.myhome.model.dto.GoogleCredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.service.UserService;
@@ -10,6 +10,8 @@ import com.ad.myhome.utils.common.CommonFunctions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
@@ -35,8 +37,21 @@ public class UserController {
 
     @PostMapping(value = "/logins")
     public UserDTO logins(
-            @RequestBody CredentialsDTO body) {
-        return userService.logins(body);
+            @RequestBody Map<String, Object> body) {
+        if(body != null && body.containsKey(CommonConstants.PARAMETER_EMAIL) && body.containsKey(CommonConstants.PARAMETER_PASSWORD)){
+            BasicCredentialsDTO credentials = new BasicCredentialsDTO(
+                    body.get(CommonConstants.PARAMETER_EMAIL).toString(), body.get(CommonConstants.PARAMETER_PASSWORD).toString());
+            return userService.logins(credentials);
+        } else if (body != null && body.containsKey(CommonConstants.PARAMETER_EMAIL) && body.containsKey(CommonConstants.PARAMETER_USERID) && body.containsKey(CommonConstants.PARAMETER_NAME) && body.containsKey(CommonConstants.PARAMETER_IMAGE) ) {
+            GoogleCredentialsDTO credentials = new GoogleCredentialsDTO(
+                    body.get(CommonConstants.PARAMETER_USERID).toString(), body.get(CommonConstants.PARAMETER_EMAIL).toString(), body.get(CommonConstants.PARAMETER_NAME).toString(), body.get(CommonConstants.PARAMETER_IMAGE).toString());
+            return userService.logins(credentials);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
     }
 
     @PutMapping(value = "/{userId}")

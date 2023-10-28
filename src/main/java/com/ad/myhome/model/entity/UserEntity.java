@@ -26,6 +26,9 @@ public class UserEntity {
     @Basic
     @Column(name = "userpassword", nullable = true, length = 20)
     private String userPassword;
+    @Basic
+    @Column(name = "userimage", nullable = true, length = 20)
+    private String userImage;
     @Enumerated(EnumType.STRING)
     @Column(name = "usercurrencypreference", nullable = false, length = 3)
     private CurrencyType userCurrencyPreference;

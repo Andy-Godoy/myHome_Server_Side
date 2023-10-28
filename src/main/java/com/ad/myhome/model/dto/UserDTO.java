@@ -15,6 +15,7 @@ public class UserDTO {
     private int userId;
     private String userName;
     private String userEmail;
+    private String userImage;
     private CurrencyType userCurrencyPreference;
     private RoleType userRole;
 
@@ -24,12 +25,7 @@ public class UserDTO {
         this.userEmail = user.getUserEmail();
         this.userCurrencyPreference = user.getUserCurrencyPreference();
         this.userRole = user.getUserRole();
+        this.userImage = user.getUserImage();
     }
 
-    // Constructor alternativo que solo incluye userId, userRole y userCurrencyPreference
-    public UserDTO(int userId, CurrencyType userCurrencyPreference, RoleType userRole) {
-        this.userId = userId;
-        this.userCurrencyPreference = userCurrencyPreference;
-        this.userRole = userRole;
-    }
 }
