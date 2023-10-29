@@ -1,7 +1,7 @@
 package com.ad.myhome.service;
 
 import com.ad.myhome.model.dto.BasicCredentialsDTO;
-import com.ad.myhome.model.dto.CredentialsDTO;
+import com.ad.myhome.model.dto.GoogleCredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.repository.UserRepository;
@@ -73,38 +73,35 @@ public class UserService {
         return new UserDTO(userRepository.save(user));
     }
 
-    /**
-     * Login usuario común o de inmobiliaria
-     * El usuario comùn existe o no existe
-     * El usuario de google en caso de no existir, se crea
-     * @param body Descripción del primer parámetro
-     * @return Descripción del valor de retorno
-     * @throws ResponseStatusException en caso de no existir usuario común
-     */
-    public UserDTO logins(CredentialsDTO body) {
+    public UserDTO logins(GoogleCredentialsDTO body) {
         UserEntity user = userRepository.findUserEntityByUserEmail(body.getUserEmail());
-        UserDTO userDTO;
-
-        if(user != null){
-            userDTO = new UserDTO(user.getUserId(),user.getUserCurrencyPreference(),user.getUserRole());
+        if(user == null){
+            user = new UserEntity();
+            user.setUserName(body.getUserName());
+            user.setUserEmail(body.getUserEmail());
+            user.setUserPassword("");
+            user.setUserImage(body.getUserImage());
+            user.setUserRole(RoleType.CONSUMER);
+            user.setUserCurrencyPreference(CurrencyType.USD);
+            userRepository.save(user);
         }
+        return new UserDTO(user);
+    }
 
-        else{
-            if(body.getUserId() != null){
-                BasicCredentialsDTO basicCredentialsDTO = new BasicCredentialsDTO(body.getUserEmail(), body.getUserPassword());
-                userDTO = registerUser(basicCredentialsDTO);
-
-                return new UserDTO(userDTO.getUserId(),userDTO.getUserCurrencyPreference(),userDTO.getUserRole());
-            }
-
-            else {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
+    public UserDTO logins(BasicCredentialsDTO body) {
+        UserEntity user = userRepository.findUserEntityByUserEmail(body.getUserEmail());
+        if(user == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
                     CommonConstants.NOTFOUND_USER_DOESNT_EXISTS
-                );
-            }
+            );
         }
-
-        return userDTO;
+        if(!user.getUserPassword().equals(body.getUserPassword()) && user.getUserRole().equals(RoleType.AGENCY)){
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    CommonConstants.FORBIDDEN_USER_INVALID_CREDENTIALS
+            );
+        }
+        return new UserDTO(user);
     }
 }
