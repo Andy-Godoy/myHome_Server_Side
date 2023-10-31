@@ -8,6 +8,7 @@ import com.ad.myhome.service.UserService;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/logins")
-    public UserDTO logins(
+    public UserDTO loginUser(
             @RequestBody Map<String, Object> body) {
         if(body != null && body.containsKey(CommonConstants.PARAMETER_EMAIL) && body.containsKey(CommonConstants.PARAMETER_PASSWORD)){
             BasicCredentialsDTO credentials = new BasicCredentialsDTO(
@@ -53,6 +54,20 @@ public class UserController {
             );
         }
     }
+
+    @PostMapping(value = "/passwords")
+    public UserDTO resetPassword(
+            @RequestBody BasicCredentialsDTO body) {
+
+        if(!StringUtils.hasText(body.getUserEmail()) || !StringUtils.hasText(body.getUserPassword())){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        return userService.resetPassword(body);
+    }
+
 
     @PutMapping(value = "/{userId}")
     public UserDTO updateUser(

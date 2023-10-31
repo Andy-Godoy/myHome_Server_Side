@@ -1,9 +1,11 @@
 package com.ad.myhome.service;
 
+import com.ad.myhome.model.dto.AgencyDTO;
 import com.ad.myhome.model.dto.BasicCredentialsDTO;
 import com.ad.myhome.model.dto.GoogleCredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.UserEntity;
+import com.ad.myhome.repository.AgencyRepository;
 import com.ad.myhome.repository.UserRepository;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.enums.CurrencyType;
@@ -16,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AgencyRepository agencyRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AgencyRepository agencyRepository) {
         this.userRepository = userRepository;
+        this.agencyRepository = agencyRepository;
     }
 
     public UserDTO getOneUser(Long userId) throws ResponseStatusException {
@@ -102,6 +106,19 @@ public class UserService {
                     CommonConstants.FORBIDDEN_USER_INVALID_CREDENTIALS
             );
         }
+        return new UserDTO(user);
+    }
+
+    public UserDTO resetPassword(BasicCredentialsDTO body) {
+        UserEntity user = userRepository.findUserEntityByUserEmail(body.getUserEmail());
+        if(user == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    CommonConstants.NOTFOUND_USER_DOESNT_EXISTS
+            );
+        }
+        user.setUserPassword(body.getUserPassword());
+        userRepository.save(user);
         return new UserDTO(user);
     }
 }

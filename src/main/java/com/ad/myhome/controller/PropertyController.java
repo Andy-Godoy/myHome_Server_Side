@@ -12,7 +12,7 @@ public class PropertyController {
 
     @GetMapping(value = "/test")
     public String test(){
-        String msg = CLASS_NAME.concat(" esta funcionando ok!");
-        return msg;
+        return CLASS_NAME.concat(" esta funcionando ok!");
     }
+
 }
