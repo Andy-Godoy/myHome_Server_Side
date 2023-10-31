@@ -1,9 +1,9 @@
 package com.ad.myhome.service;
 
-import com.ad.myhome.model.dto.AgencyDTO;
 import com.ad.myhome.model.dto.BasicCredentialsDTO;
 import com.ad.myhome.model.dto.GoogleCredentialsDTO;
 import com.ad.myhome.model.dto.UserDTO;
+import com.ad.myhome.model.entity.AgencyEntity;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.repository.AgencyRepository;
 import com.ad.myhome.repository.UserRepository;
@@ -69,12 +69,17 @@ public class UserService {
             );
         }
         user = new UserEntity();
-        user.setUserName(body.getUserEmail());
+        user.setUserName(body.getUserEmail().substring(0,body.getUserEmail().indexOf("@")));
         user.setUserEmail(body.getUserEmail());
         user.setUserPassword(body.getUserPassword());
         user.setUserRole(RoleType.AGENCY);
         user.setUserCurrencyPreference(CurrencyType.USD);
-        return new UserDTO(userRepository.save(user));
+        userRepository.save(user);
+
+        AgencyEntity agency = new AgencyEntity(user.getUserId(), user.getUserName().concat(" Propiedades"), user.getUserEmail());
+        agencyRepository.save(agency);
+
+        return new UserDTO(user);
     }
 
     public UserDTO logins(GoogleCredentialsDTO body) {
