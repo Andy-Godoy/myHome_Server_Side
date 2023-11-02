@@ -68,7 +68,6 @@ public class UserController {
         return userService.resetPassword(body);
     }
 
-
     @PutMapping(value = "/{userId}")
     public UserDTO updateUser(
             @PathVariable(name = "userId", required = true) Long userId,
