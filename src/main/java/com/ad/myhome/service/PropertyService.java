@@ -39,7 +39,7 @@ public class PropertyService {
     }
 
     public PropertyDTO getProperty(Long propertyId) {
-        PropertyEntity property = propertyRepository.findPropertyEntitiesByPropertyId(propertyId);
+        PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -51,7 +51,7 @@ public class PropertyService {
     }
 
     public void deleteProperty(Long propertyId, Long agencyId){
-        PropertyEntity property = propertyRepository.findPropertyEntitiesByPropertyId(propertyId);
+        PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -69,7 +69,7 @@ public class PropertyService {
     }
 
     public PropertyDTO updateProperty(Long propertyId, Long agencyId, PropertyDTO body) {
-        PropertyEntity property = propertyRepository.findPropertyEntitiesByPropertyId(propertyId);
+        PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,

@@ -45,8 +45,8 @@ public class PropertyController {
     @GetMapping(value = "/{propertyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public PropertyDTO getProperty(
-            @PathVariable(name = "propertyId") Long propertyId) throws ResponseStatusException {
-        if(!CommonFunctions.isMissing(propertyId)){
+            @PathVariable("propertyId") Long propertyId) throws ResponseStatusException {
+        if(CommonFunctions.isMissing(propertyId)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     CommonConstants.BADREQUEST_MISSINGPARAMETER
@@ -58,10 +58,10 @@ public class PropertyController {
     @PutMapping(value = "/{propertyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public PropertyDTO putProperty(
-            @PathVariable(name = "propertyId") Long propertyId,
+            @PathVariable("propertyId") Long propertyId,
             @RequestParam(name = "agencyId") Long agencyId,
             @RequestBody PropertyDTO body) throws ResponseStatusException {
-        if(!CommonFunctions.isMissing(propertyId) || !isValidProperty(body)){
+        if(CommonFunctions.isMissing(propertyId) || !isValidProperty(body)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     CommonConstants.BADREQUEST_MISSINGPARAMETER
@@ -73,7 +73,7 @@ public class PropertyController {
     @DeleteMapping(value = "/{propertyId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteProperty(
-            @PathVariable(name = "propertyId") Long propertyId,
+            @PathVariable("propertyId") Long propertyId,
             @RequestParam(name = "agencyId") Long agencyId) throws ResponseStatusException {
         if(CommonFunctions.isMissing(propertyId) || CommonFunctions.isMissing(agencyId)){
             throw new ResponseStatusException(
