@@ -1,5 +1,7 @@
 package com.ad.myhome.model.dto;
 
+import com.ad.myhome.model.entity.AddressEntity;
+import com.ad.myhome.model.entity.PropertyEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,5 +10,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PropertySummaryDTO {
-    private int agencyId;
+
+    private Long propertyId;
+    private Long agencyId;
+    private Integer propertyPrice;
+    private Integer propertyDimension;
+    private Integer propertyBedroomQuantity;
+    private String propertyDescription;
+    private String propertyAddress;
+    private String propertyNeighbourhood;
+    private String propertyCity;
+
+    public PropertySummaryDTO(PropertyEntity property, AddressEntity address) {
+        this.propertyId = property.getPropertyId();
+        this.agencyId = property.getAgencyId();
+        this.propertyPrice = property.getPropertyPrice();
+        this.propertyBedroomQuantity = property.getPropertyBedroomQuantity();
+        this.propertyDescription = property.getPropertyDescription();
+        this.propertyDimension =
+                ((property.getPropertyCoveredM2() == null) ? 0 : property.getPropertyCoveredM2()) +
+                ((property.getPropertySemiCoveredM2() == null) ? 0 : property.getPropertySemiCoveredM2()) +
+                ((property.getPropertyUncoveredM2() == null) ? 0 : property.getPropertyUncoveredM2());
+        this.propertyAddress = address.getAddressName().concat(" ").concat(String.valueOf(address.getAddressNumber()));
+        this.propertyNeighbourhood = address.getAddressNeighbourhood();
+        this.propertyCity = address.getAddressCity();
+    }
+
 }
