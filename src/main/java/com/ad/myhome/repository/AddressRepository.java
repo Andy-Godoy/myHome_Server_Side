@@ -16,4 +16,5 @@ public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
             @Param("addressName") String addressName, @Param("addressNumber") Integer addressNumber, @Param("addressFloor") Integer addressFloor, @Param("addressUnit") String addressUnit,
             @Param("addressCity") String addressCity, @Param("addressState") String addressState, @Param("addressCountry") String addressCountry);
 
+    AddressEntity findAddressEntitiesByAddressId(Long propertyId);
 }
