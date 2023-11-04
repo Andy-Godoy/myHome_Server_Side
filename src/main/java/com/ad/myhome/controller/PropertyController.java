@@ -2,14 +2,17 @@ package com.ad.myhome.controller;
 
 import com.ad.myhome.model.dto.AddressDTO;
 import com.ad.myhome.model.dto.PropertyDTO;
+import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.service.PropertyService;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/v1/properties")
@@ -40,6 +43,13 @@ public class PropertyController {
             );
         }
         return propertyService.saveProperty(agencyId, body);
+    }
+
+    @GetMapping(value = "")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<PropertySummaryDTO> getProperties(
+            @RequestBody Map<String, Object> filters) throws ResponseStatusException {
+        return propertyService.getProperties(filters);
     }
 
     @GetMapping(value = "/{propertyId}")

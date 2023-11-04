@@ -1,6 +1,7 @@
 package com.ad.myhome.service;
 
 import com.ad.myhome.model.dto.PropertyDTO;
+import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.model.entity.AddressEntity;
 import com.ad.myhome.model.entity.PropertyEntity;
 import com.ad.myhome.repository.AddressRepository;
@@ -9,6 +10,9 @@ import com.ad.myhome.utils.common.CommonConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PropertyService {
@@ -94,6 +98,30 @@ public class PropertyService {
         propertyRepository.save(property);
 
         return new PropertyDTO(property, address);
+    }
+
+    public List<PropertySummaryDTO> getProperties(Map<String, Object> filters) {
+        List<PropertyEntity> propertyList = propertyRepository.findAll();
+        List<PropertyEntity> filteredList = new ArrayList<>();
+        for(Map.Entry<String, Object> entry: filters.entrySet()) {
+            switch (entry.getKey()) {
+                case "agencyId": {
+                    filteredList = propertyList.stream().filter(p -> p.getAgencyId().equals(Long.valueOf(entry.getValue().toString()))).toList();
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+            propertyList = filteredList;
+        }
+
+        List<PropertySummaryDTO> properties = new ArrayList<>();
+        for(PropertyEntity property : filteredList){
+            AddressEntity address = addressRepository.findAddressEntitiesByAddressId(property.getPropertyAddressId());
+            properties.add(new PropertySummaryDTO(property, address));
+        }
+        return properties;
     }
 
 }
