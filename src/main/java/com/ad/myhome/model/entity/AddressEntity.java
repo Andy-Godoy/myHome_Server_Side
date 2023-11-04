@@ -15,7 +15,7 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "addressid", nullable = false)
-    private int addressId;
+    private Long addressId;
     @Basic
     @Column(name = "propertyid", nullable = false)
     private int propertyId;
@@ -62,4 +62,18 @@ public class AddressEntity {
         this.addressLatitude = propertyAddress.getAddressLatitude();
         this.addressLongitude = propertyAddress.getAddressLongitude();
     }
+
+    public void update(AddressDTO propertyAddress) {
+        this.addressName = propertyAddress.getAddressName();
+        this.addressNumber = propertyAddress.getAddressNumber();
+        this.addressFloor = propertyAddress.getAddressFloor();
+        this.addressUnit = propertyAddress.getAddressUnit();
+        this.addressNeighbourhood = propertyAddress.getAddressNeighbourhood();
+        this.addressCity = propertyAddress.getAddressCity();
+        this.addressState = propertyAddress.getAddressState();
+        this.addressCountry = propertyAddress.getAddressCountry();
+        this.addressLatitude = propertyAddress.getAddressLatitude();
+        this.addressLongitude = propertyAddress.getAddressLongitude();
+    }
+
 }

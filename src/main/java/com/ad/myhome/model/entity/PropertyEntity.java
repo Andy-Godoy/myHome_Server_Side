@@ -78,9 +78,31 @@ public class PropertyEntity {
     private Integer propertyUncoveredM2;
     @Basic
     @Column(name = "propertyaddressid", nullable = true)
-    private Integer propertyAddressId;
+    private Long propertyAddressId;
 
     public PropertyEntity(PropertyDTO body) {
+        this.propertyType = body.getPropertyType();
+        this.propertyStatus = body.getPropertyStatus();
+        this.propertyPrice = body.getPropertyPrice();
+        this.propertyExpenses = body.getPropertyExpenses();
+        this.propertyRoomQuantity = body.getPropertyRoomQuantity();
+        this.propertyBedroomQuantity = body.getPropertyBedroomQuantity();
+        this.propertyBathroomQuantity = body.getPropertyBathroomQuantity();
+        this.propertyGarageQuantity = body.getPropertyGarageQuantity();
+        this.propertyHasGarage = body.getPropertyHasGarage();
+        this.propertyHasBalcony = body.getPropertyHasBalcony();
+        this.propertyHasStorage = body.getPropertyHasStorage();
+        this.propertyPosition = body.getPropertyPosition();
+        this.propertyOrientation = body.getPropertyOrientation();
+        this.propertyAge = body.getPropertyAge();
+        this.propertyAmenities = String.join(", ", body.getPropertyAmenities());
+        this.propertyDescription = body.getPropertyDescription();
+        this.propertyCoveredM2 = body.getPropertyCoveredM2();
+        this.propertySemiCoveredM2 = body.getPropertySemiCoveredM2();
+        this.propertyUncoveredM2 = body.getPropertyUncoveredM2();
+    }
+
+    public void update(PropertyDTO body) {
         this.propertyType = body.getPropertyType();
         this.propertyStatus = body.getPropertyStatus();
         this.propertyPrice = body.getPropertyPrice();

@@ -5,6 +5,7 @@ import com.ad.myhome.model.dto.PropertyDTO;
 import com.ad.myhome.service.PropertyService;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class PropertyController {
     }
 
     @PostMapping(value = "")
+    @ResponseStatus(value = HttpStatus.CREATED)
     public PropertyDTO saveProperty(
             @RequestParam(name = "agencyId") Long agencyId,
             @RequestBody PropertyDTO body) throws ResponseStatusException {
@@ -40,7 +42,49 @@ public class PropertyController {
         return propertyService.saveProperty(agencyId, body);
     }
 
-    private Boolean isValidProperty(PropertyDTO property){
+    @GetMapping(value = "/{propertyId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PropertyDTO getProperty(
+            @PathVariable(name = "propertyId") Long propertyId) throws ResponseStatusException {
+        if(!CommonFunctions.isMissing(propertyId)){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        return propertyService.getProperty(propertyId);
+    }
+
+    @PutMapping(value = "/{propertyId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PropertyDTO putProperty(
+            @PathVariable(name = "propertyId") Long propertyId,
+            @RequestParam(name = "agencyId") Long agencyId,
+            @RequestBody PropertyDTO body) throws ResponseStatusException {
+        if(!CommonFunctions.isMissing(propertyId) || !isValidProperty(body)){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        return propertyService.updateProperty(propertyId, agencyId, body);
+    }
+
+    @DeleteMapping(value = "/{propertyId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteProperty(
+            @PathVariable(name = "propertyId") Long propertyId,
+            @RequestParam(name = "agencyId") Long agencyId) throws ResponseStatusException {
+        if(CommonFunctions.isMissing(propertyId) || CommonFunctions.isMissing(agencyId)){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        propertyService.deleteProperty(propertyId, agencyId);
+    }
+
+        private Boolean isValidProperty(PropertyDTO property){
         return (
             StringUtils.hasText(property.getPropertyType()) &&
             StringUtils.hasText(property.getPropertyStatus()) &&
