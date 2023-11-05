@@ -48,7 +48,7 @@ public class PropertyController {
     @GetMapping(value = "")
     @ResponseStatus(value = HttpStatus.OK)
     public List<PropertySummaryDTO> getProperties(
-            @RequestBody Map<String, Object> filters) throws ResponseStatusException {
+            @RequestParam(name = "filters") Map<String, Object> filters) throws ResponseStatusException {
         return propertyService.getProperties(filters);
     }
 
