@@ -1,19 +1,17 @@
 package com.ad.myhome.controller;
 
 import com.ad.myhome.model.dto.AddressDTO;
+import com.ad.myhome.model.dto.FiltersDTO;
 import com.ad.myhome.model.dto.PropertyDTO;
 import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.service.PropertyService;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/v1/properties")
@@ -49,7 +47,7 @@ public class PropertyController {
     @PostMapping(value = "/filters")
     @ResponseStatus(value = HttpStatus.OK)
     public List<PropertySummaryDTO> getProperties(
-            @RequestBody Map<String, Object> filters) throws ResponseStatusException {
+            @RequestBody FiltersDTO filters) throws ResponseStatusException {
         return propertyService.getProperties(filters);
     }
 
