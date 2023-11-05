@@ -45,10 +45,10 @@ public class PropertyController {
         return propertyService.saveProperty(agencyId, body);
     }
 
-    @GetMapping(value = "")
+    @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.OK)
     public List<PropertySummaryDTO> getProperties(
-            @RequestParam(name = "filters") Map<String, Object> filters) throws ResponseStatusException {
+            @RequestBody Map<String, Object> filters) throws ResponseStatusException {
         return propertyService.getProperties(filters);
     }
 
