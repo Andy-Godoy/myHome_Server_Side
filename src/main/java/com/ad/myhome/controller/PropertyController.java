@@ -6,6 +6,7 @@ import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.service.PropertyService;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -45,10 +46,10 @@ public class PropertyController {
         return propertyService.saveProperty(agencyId, body);
     }
 
-    @PostMapping(value = "")
+    @GetMapping(value = "")
     @ResponseStatus(value = HttpStatus.OK)
     public List<PropertySummaryDTO> getProperties(
-            @RequestBody Map<String, Object> filters) throws ResponseStatusException {
+            @RequestParam(required = false) Map<String, Object> filters) throws ResponseStatusException {
         return propertyService.getProperties(filters);
     }
 
