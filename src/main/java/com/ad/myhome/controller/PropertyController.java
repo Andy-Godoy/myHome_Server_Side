@@ -31,7 +31,6 @@ public class PropertyController {
     }
 
     @PostMapping(value = "")
-    @ResponseStatus(value = HttpStatus.CREATED)
     public PropertyDTO saveProperty(
             @RequestParam(name = "agencyId") Long agencyId,
             @RequestBody PropertyDTO body) throws ResponseStatusException {
@@ -45,14 +44,12 @@ public class PropertyController {
     }
 
     @PostMapping(value = "/filters")
-    @ResponseStatus(value = HttpStatus.OK)
     public List<PropertySummaryDTO> getProperties(
             @RequestBody FiltersDTO filters) throws ResponseStatusException {
         return propertyService.getProperties(filters);
     }
 
     @GetMapping(value = "/{propertyId}")
-    @ResponseStatus(value = HttpStatus.OK)
     public PropertyDTO getProperty(
             @PathVariable("propertyId") Long propertyId) throws ResponseStatusException {
         if(CommonFunctions.isMissing(propertyId)){
@@ -65,7 +62,6 @@ public class PropertyController {
     }
 
     @PutMapping(value = "/{propertyId}")
-    @ResponseStatus(value = HttpStatus.OK)
     public PropertyDTO putProperty(
             @PathVariable("propertyId") Long propertyId,
             @RequestParam(name = "agencyId") Long agencyId,
@@ -80,7 +76,6 @@ public class PropertyController {
     }
 
     @DeleteMapping(value = "/{propertyId}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteProperty(
             @PathVariable("propertyId") Long propertyId,
             @RequestParam(name = "agencyId") Long agencyId) throws ResponseStatusException {

@@ -88,7 +88,6 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{userId}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteUser(
             @PathVariable(name = "userId") Long userId) throws ResponseStatusException {
         if(CommonFunctions.isMissing(userId)){
