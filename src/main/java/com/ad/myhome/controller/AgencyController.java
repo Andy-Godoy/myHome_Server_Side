@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/api/v1/agencies")
 public class AgencyController {
@@ -26,11 +24,6 @@ public class AgencyController {
     @GetMapping(value = "/test")
     public String test(){
         return CLASS_NAME.concat(" esta funcionando ok!");
-    }
-
-    @GetMapping(value = "")
-    public List<AgencyEntity> getAgencies(@RequestParam(name = "userId", required = true) Long userId){
-        return agencyService.getAgencies(userId);
     }
 
     @PostMapping(value = "")
