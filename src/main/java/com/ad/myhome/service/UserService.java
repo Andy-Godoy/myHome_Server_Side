@@ -79,7 +79,10 @@ public class UserService {
         AgencyEntity agency = new AgencyEntity(user.getUserId(), user.getUserName().concat(" Propiedades"), user.getUserEmail());
         agencyRepository.save(agency);
 
-        return new UserDTO(user);
+        UserDTO userDTO = new UserDTO(user);
+        userDTO.setAgencyId(agency.getAgencyId());
+
+        return userDTO;
     }
 
     public UserDTO logins(GoogleCredentialsDTO body) {
@@ -127,6 +130,11 @@ public class UserService {
         }
         user.setUserPassword(body.getUserPassword());
         userRepository.save(user);
-        return new UserDTO(user);
+
+        AgencyEntity agency = agencyRepository.findAgencyEntityByUserId(user.getUserId());
+        UserDTO userDTO = new UserDTO(user);
+        userDTO.setAgencyId(agency.getAgencyId());
+
+        return userDTO;
     }
 }
