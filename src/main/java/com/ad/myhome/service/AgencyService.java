@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @Service
 public class AgencyService {
 
@@ -21,10 +19,6 @@ public class AgencyService {
     public AgencyService(AgencyRepository agencyRepository, ReviewRepository reviewRepository) {
         this.agencyRepository = agencyRepository;
         this.reviewRepository = reviewRepository;
-    }
-
-    public List<AgencyEntity> getAgencies(Long userId) {
-        return agencyRepository.findAgencyEntitiesByUserId(userId);
     }
 
     public AgencyResponseDTO getOneAgency(Long agencyId){

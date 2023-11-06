@@ -111,7 +111,10 @@ public class UserService {
                     CommonConstants.FORBIDDEN_USER_INVALID_CREDENTIALS
             );
         }
-        return new UserDTO(user);
+        AgencyEntity agency = agencyRepository.findAgencyEntityByUserId(user.getUserId());
+        UserDTO userDTO = new UserDTO(user);
+        userDTO.setAgencyId(agency.getAgencyId());
+        return userDTO;
     }
 
     public UserDTO resetPassword(BasicCredentialsDTO body) {

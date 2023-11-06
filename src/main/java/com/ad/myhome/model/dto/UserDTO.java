@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
 
     private Long userId;
+    private Long agencyId;
     private String userName;
     private String userEmail;
     private String userImage;
