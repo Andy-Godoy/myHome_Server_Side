@@ -53,6 +53,9 @@ public class PropertyEntity {
     @Column(name = "propertyhasstorage", nullable = true)
     private Boolean propertyHasStorage;
     @Basic
+    @Column(name = "propertyhasterrace", nullable = true)
+    private Boolean propertyHasTerrace;
+    @Basic
     @Column(name = "propertyposition", nullable = true, length = 50)
     private String propertyPosition;
     @Basic
@@ -92,6 +95,7 @@ public class PropertyEntity {
         this.propertyHasGarage = body.getPropertyHasGarage();
         this.propertyHasBalcony = body.getPropertyHasBalcony();
         this.propertyHasStorage = body.getPropertyHasStorage();
+        this.propertyHasTerrace = body.getPropertyHasTerrace();
         this.propertyPosition = body.getPropertyPosition();
         this.propertyOrientation = body.getPropertyOrientation();
         this.propertyAge = body.getPropertyAge();
@@ -114,6 +118,7 @@ public class PropertyEntity {
         this.propertyHasGarage = body.getPropertyHasGarage();
         this.propertyHasBalcony = body.getPropertyHasBalcony();
         this.propertyHasStorage = body.getPropertyHasStorage();
+        this.propertyHasTerrace = body.getPropertyHasTerrace();
         this.propertyPosition = body.getPropertyPosition();
         this.propertyOrientation = body.getPropertyOrientation();
         this.propertyAge = body.getPropertyAge();
@@ -123,4 +128,5 @@ public class PropertyEntity {
         this.propertySemiCoveredM2 = body.getPropertySemiCoveredM2();
         this.propertyUncoveredM2 = body.getPropertyUncoveredM2();
     }
+
 }

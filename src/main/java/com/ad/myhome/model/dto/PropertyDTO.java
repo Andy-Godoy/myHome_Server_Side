@@ -24,6 +24,7 @@ public class PropertyDTO {
     private Boolean propertyHasGarage;
     private Boolean propertyHasBalcony;
     private Boolean propertyHasStorage;
+    private Boolean propertyHasTerrace;
     private String propertyPosition;
     private String propertyOrientation;
     private String propertyAge;
@@ -48,6 +49,7 @@ public class PropertyDTO {
         this.propertyHasGarage = property.getPropertyHasGarage();
         this.propertyHasBalcony = property.getPropertyHasBalcony();
         this.propertyHasStorage = property.getPropertyHasStorage();
+        this.propertyHasTerrace = property.getPropertyHasTerrace();
         this.propertyPosition = property.getPropertyPosition();
         this.propertyOrientation = property.getPropertyOrientation();
         this.propertyAge = property.getPropertyAge();
