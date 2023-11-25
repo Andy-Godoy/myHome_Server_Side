@@ -33,9 +33,10 @@ public class PropertyDTO {
     private Integer propertyCoveredM2;
     private Integer propertySemiCoveredM2;
     private Integer propertyUncoveredM2;
+    private String[] propertyImages;
     private AddressDTO propertyAddress;
 
-    public PropertyDTO(PropertyEntity property, AddressEntity address) {
+    public PropertyDTO(PropertyEntity property, AddressEntity address, String[] urls) {
         this.propertyId = property.getPropertyId();
         this.agencyId = property.getAgencyId();
         this.propertyType = property.getPropertyType();
@@ -54,6 +55,7 @@ public class PropertyDTO {
         this.propertyOrientation = property.getPropertyOrientation();
         this.propertyAge = property.getPropertyAge();
         this.propertyAmenities = property.getPropertyAmenities().split(",\\s*");
+        this.propertyImages = urls;
         this.propertyDescription = property.getPropertyDescription();
         this.propertyCoveredM2 = property.getPropertyCoveredM2();
         this.propertySemiCoveredM2 = property.getPropertySemiCoveredM2();

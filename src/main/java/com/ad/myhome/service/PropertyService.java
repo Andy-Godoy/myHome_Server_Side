@@ -4,28 +4,36 @@ import com.ad.myhome.model.dto.FiltersDTO;
 import com.ad.myhome.model.dto.PropertyDTO;
 import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.model.entity.AddressEntity;
+import com.ad.myhome.model.entity.MediaEntity;
 import com.ad.myhome.model.entity.PropertyEntity;
 import com.ad.myhome.repository.AddressRepository;
+import com.ad.myhome.repository.MediaRepository;
 import com.ad.myhome.repository.PropertyRepository;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
+import com.ad.myhome.utils.enums.SourceType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class PropertyService {
 
-    private PropertyRepository propertyRepository;
-    private AddressRepository addressRepository;
+    private final PropertyRepository propertyRepository;
+    private final AddressRepository addressRepository;
+    private final MediaRepository mediaRepository;
 
-    public PropertyService(PropertyRepository propertyRepository, AddressRepository addressRepository) {
+    public PropertyService(PropertyRepository propertyRepository, AddressRepository addressRepository, MediaRepository mediaRepository) {
         this.propertyRepository = propertyRepository;
         this.addressRepository = addressRepository;
+        this.mediaRepository = mediaRepository;
     }
 
+    @Transactional
     public PropertyDTO saveProperty(Long agencyId, PropertyDTO body){
         AddressEntity address = addressRepository.findAddressEntitiesByAddressDTO(
                 body.getPropertyAddress().getAddressName(), body.getPropertyAddress().getAddressNumber(), body.getPropertyAddress().getAddressFloor(), body.getPropertyAddress().getAddressUnit(),
@@ -40,7 +48,15 @@ public class PropertyService {
         property.setPropertyAddressId(address.getAddressId());
         propertyRepository.save(property);
 
-        return new PropertyDTO(property, address);
+        String[] urls = body.getPropertyImages();
+        if(urls.length > 0){
+            List<MediaEntity> propertyImagesList = new ArrayList();
+            for (String url : urls) {
+                propertyImagesList.add(new MediaEntity(property.getPropertyId(), SourceType.PROPERTY, url));
+            }
+            mediaRepository.saveAll(propertyImagesList);
+        }
+        return new PropertyDTO(property, address, urls);
     }
 
     public PropertyDTO getProperty(Long propertyId) {
@@ -52,9 +68,18 @@ public class PropertyService {
             );
         }
         AddressEntity address = addressRepository.findAddressEntitiesByAddressId(property.getPropertyAddressId());
-        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address);
+        List<MediaEntity> medias = mediaRepository.findMediaEntitiesByMediaSourceIdAndMediaSourceType(propertyId, SourceType.PROPERTY);
+        String[] urls = null;
+        if(!medias.isEmpty()){
+            urls = new String[medias.size()];
+            for (int i = 0; i < medias.size(); i++) {
+                urls[i] = medias.get(i).getMediaUrl();
+            }
+        }
+        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address, urls);
     }
 
+    @Transactional
     public void deleteProperty(Long propertyId, Long agencyId){
         PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
@@ -69,10 +94,11 @@ public class PropertyService {
                     CommonConstants.FORBIDDEN_PROPERTY_UNEDITABLE
             );
         }
-
+        mediaRepository.deleteMediaEntitiesByMediaSourceIdAndMediaSourceType(propertyId, SourceType.PROPERTY);
         propertyRepository.deleteById(propertyId);
     }
 
+    @Transactional
     public PropertyDTO updateProperty(Long propertyId, Long agencyId, PropertyDTO body) {
         PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
@@ -98,18 +124,31 @@ public class PropertyService {
         property.update(body);
         propertyRepository.save(property);
 
-        return new PropertyDTO(property, address);
+        String[] urls = body.getPropertyImages();
+        List<MediaEntity> medias = mediaRepository.findMediaEntitiesByMediaSourceIdAndMediaSourceType(propertyId, SourceType.PROPERTY);
+        for (String url : urls) {
+            if (!medias.stream().map(MediaEntity::getMediaUrl).toList().contains(url)) {
+                medias.add(new MediaEntity(propertyId, SourceType.PROPERTY, url));
+            }
+        }
+        medias = mediaRepository.saveAll(medias);
+        for (MediaEntity media: medias) {
+            if(!Arrays.stream(urls).toList().contains(media.getMediaUrl())){
+                mediaRepository.delete(media);
+            }
+        }
+        return new PropertyDTO(property, address, urls);
     }
 
     public List<PropertySummaryDTO> getProperties(FiltersDTO filters) {
         List<PropertyEntity> propertyList = propertyRepository.findAll();
-        List<PropertyEntity> filteredList = new ArrayList<>();
-        if(!CommonFunctions.isMissing(filters.getAgencyId())){
+        List<PropertyEntity> filteredList;
+        if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getAgencyId()))){
             filteredList = propertyList.stream().filter(p -> p.getAgencyId().equals(filters.getAgencyId())).toList();
             propertyList = filteredList;
         }
 
-        List<PropertySummaryDTO> properties = new ArrayList<>();
+        List<PropertySummaryDTO> properties = new ArrayList();
         for(PropertyEntity property : propertyList){
             AddressEntity address = addressRepository.findAddressEntitiesByAddressId(property.getPropertyAddressId());
             properties.add(new PropertySummaryDTO(property, address));
