@@ -27,7 +27,7 @@ public class ReviewController {
     }
 
     @GetMapping(value = "")
-    public List<ReviewEntity> getReviews(@RequestParam(name = "agencyId") Long agencyId)
+    public List<ReviewDTO> getReviews(@RequestParam(name = "agencyId") Long agencyId)
         throws ResponseStatusException{
         if (CommonFunctions.isMissing(agencyId)){
             throw new ResponseStatusException(

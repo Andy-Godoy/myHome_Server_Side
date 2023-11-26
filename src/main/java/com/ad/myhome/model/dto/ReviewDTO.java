@@ -11,5 +11,7 @@ public class ReviewDTO {
 
     private int reviewScore;
     private String reviewComment;
+    private String userName;
+    private String userPhoto;
 
 }

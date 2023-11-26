@@ -6,6 +6,7 @@ import com.ad.myhome.model.dto.UserDTO;
 import com.ad.myhome.model.entity.AgencyEntity;
 import com.ad.myhome.model.entity.UserEntity;
 import com.ad.myhome.repository.AgencyRepository;
+import com.ad.myhome.repository.PropertyRepository;
 import com.ad.myhome.repository.UserRepository;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.enums.CurrencyType;
@@ -19,10 +20,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AgencyRepository agencyRepository;
+    private final PropertyRepository propertyRepository;
 
-    public UserService(UserRepository userRepository, AgencyRepository agencyRepository) {
+    public UserService(UserRepository userRepository, AgencyRepository agencyRepository, PropertyRepository propertyRepository) {
         this.userRepository = userRepository;
         this.agencyRepository = agencyRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     public UserDTO getOneUser(Long userId) throws ResponseStatusException {
@@ -56,6 +59,13 @@ public class UserService {
                     HttpStatus.NOT_FOUND,
                     CommonConstants.NOTFOUND_USER_DOESNT_EXISTS
             );
+        }
+        if(user.getUserRole().equals(RoleType.AGENCY)){
+            AgencyEntity agency = agencyRepository.findAgencyEntityByUserId(user.getUserId());
+            if(agency != null){
+                propertyRepository.deletePropertyEntitiesByAgencyId(agency.getAgencyId());
+                agencyRepository.delete(agency);
+            }
         }
         userRepository.deleteById(userId);
     }
