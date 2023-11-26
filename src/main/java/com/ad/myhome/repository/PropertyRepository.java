@@ -11,4 +11,6 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Long> 
     PropertyEntity findPropertyEntityByPropertyId(Long propertyId);
     List<PropertyEntity> findPropertyEntityByAgencyId(Long agencyId);
 
+    void deletePropertyEntitiesByAgencyId(Long agencyId);
+
 }
