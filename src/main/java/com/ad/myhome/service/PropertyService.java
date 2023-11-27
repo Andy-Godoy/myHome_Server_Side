@@ -50,7 +50,7 @@ public class PropertyService {
 
         String[] urls = body.getPropertyImages();
         if(urls.length > 0){
-            List<MediaEntity> propertyImagesList = new ArrayList();
+            List<MediaEntity> propertyImagesList = new ArrayList<MediaEntity>();
             for (String url : urls) {
                 propertyImagesList.add(new MediaEntity(property.getPropertyId(), SourceType.PROPERTY, url));
             }
@@ -148,10 +148,19 @@ public class PropertyService {
             propertyList = filteredList;
         }
 
-        List<PropertySummaryDTO> properties = new ArrayList();
+        List<PropertySummaryDTO> properties = new ArrayList<>();
         for(PropertyEntity property : propertyList){
             AddressEntity address = addressRepository.findAddressEntitiesByAddressId(property.getPropertyAddressId());
-            properties.add(new PropertySummaryDTO(property, address));
+            List<MediaEntity> medias = mediaRepository.findMediaEntitiesByMediaSourceIdAndMediaSourceType(property.getPropertyId(), SourceType.PROPERTY);
+            String[] urls = null;
+            if(!medias.isEmpty()){
+                urls = new String[medias.size()];
+                for (int i = 0; i < medias.size(); i++) {
+                    urls[i] = medias.get(i).getMediaUrl();
+                }
+            }
+
+            properties.add(new PropertySummaryDTO(property, address, urls));
         }
         return properties;
     }
