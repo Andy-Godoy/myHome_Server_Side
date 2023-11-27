@@ -151,7 +151,16 @@ public class PropertyService {
         List<PropertySummaryDTO> properties = new ArrayList();
         for(PropertyEntity property : propertyList){
             AddressEntity address = addressRepository.findAddressEntitiesByAddressId(property.getPropertyAddressId());
-            properties.add(new PropertySummaryDTO(property, address));
+            List<MediaEntity> medias = mediaRepository.findMediaEntitiesByMediaSourceIdAndMediaSourceType(property.getPropertyId(), SourceType.PROPERTY);
+            String[] urls = null;
+            if(!medias.isEmpty()){
+                urls = new String[medias.size()];
+                for (int i = 0; i < medias.size(); i++) {
+                    urls[i] = medias.get(i).getMediaUrl();
+                }
+            }
+
+            properties.add(new PropertySummaryDTO(property, address, urls));
         }
         return properties;
     }

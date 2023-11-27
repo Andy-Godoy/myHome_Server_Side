@@ -20,8 +20,9 @@ public class PropertySummaryDTO {
     private String propertyAddress;
     private String propertyNeighbourhood;
     private String propertyCity;
+    private String[] propertyImages;
 
-    public PropertySummaryDTO(PropertyEntity property, AddressEntity address) {
+    public PropertySummaryDTO(PropertyEntity property, AddressEntity address, String[] urls) {
         this.propertyId = property.getPropertyId();
         this.agencyId = property.getAgencyId();
         this.propertyPrice = property.getPropertyPrice();
@@ -34,6 +35,7 @@ public class PropertySummaryDTO {
         this.propertyAddress = address.getAddressName().concat(" ").concat(String.valueOf(address.getAddressNumber()));
         this.propertyNeighbourhood = address.getAddressNeighbourhood();
         this.propertyCity = address.getAddressCity();
+        this.propertyImages= urls;
     }
 
 }
