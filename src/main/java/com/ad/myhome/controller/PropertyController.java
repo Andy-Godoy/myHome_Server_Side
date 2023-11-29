@@ -88,7 +88,20 @@ public class PropertyController {
         propertyService.deleteProperty(propertyId, agencyId);
     }
 
-        private Boolean isValidProperty(PropertyDTO property){
+    @PostMapping(value = "/{propertyId}/favorites")
+    public void updateFavorite(
+            @PathVariable("propertyId") Long propertyId,
+            @RequestParam("userId") Long userId) throws ResponseStatusException {
+        if(CommonFunctions.isMissing(propertyId) || CommonFunctions.isMissing(userId)){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        propertyService.updateFavorite(userId, propertyId);
+    }
+
+    private Boolean isValidProperty(PropertyDTO property){
         return (
             StringUtils.hasText(property.getPropertyType()) &&
             StringUtils.hasText(property.getPropertyStatus()) &&

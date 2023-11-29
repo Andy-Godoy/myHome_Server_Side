@@ -4,9 +4,11 @@ import com.ad.myhome.model.dto.FiltersDTO;
 import com.ad.myhome.model.dto.PropertyDTO;
 import com.ad.myhome.model.dto.PropertySummaryDTO;
 import com.ad.myhome.model.entity.AddressEntity;
+import com.ad.myhome.model.entity.FavoritesEntity;
 import com.ad.myhome.model.entity.MediaEntity;
 import com.ad.myhome.model.entity.PropertyEntity;
 import com.ad.myhome.repository.AddressRepository;
+import com.ad.myhome.repository.FavoritesRepository;
 import com.ad.myhome.repository.MediaRepository;
 import com.ad.myhome.repository.PropertyRepository;
 import com.ad.myhome.utils.common.CommonConstants;
@@ -26,11 +28,13 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final AddressRepository addressRepository;
     private final MediaRepository mediaRepository;
+    private final FavoritesRepository favoritesRepository;
 
-    public PropertyService(PropertyRepository propertyRepository, AddressRepository addressRepository, MediaRepository mediaRepository) {
+    public PropertyService(PropertyRepository propertyRepository, AddressRepository addressRepository, MediaRepository mediaRepository, FavoritesRepository favoritesRepository) {
         this.propertyRepository = propertyRepository;
         this.addressRepository = addressRepository;
         this.mediaRepository = mediaRepository;
+        this.favoritesRepository = favoritesRepository;
     }
 
     @Transactional
@@ -50,7 +54,7 @@ public class PropertyService {
 
         String[] urls = body.getPropertyImages();
         if(urls.length > 0){
-            List<MediaEntity> propertyImagesList = new ArrayList<MediaEntity>();
+            List<MediaEntity> propertyImagesList = new ArrayList<>();
             for (String url : urls) {
                 propertyImagesList.add(new MediaEntity(property.getPropertyId(), SourceType.PROPERTY, url));
             }
@@ -143,9 +147,16 @@ public class PropertyService {
     public List<PropertySummaryDTO> getProperties(FiltersDTO filters) {
         List<PropertyEntity> propertyList = propertyRepository.findAll();
         List<PropertyEntity> filteredList;
-        if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getAgencyId()))){
-            filteredList = propertyList.stream().filter(p -> p.getAgencyId().equals(filters.getAgencyId())).toList();
+        if(filters.getIsFavorite() != null && filters.getIsFavorite()){
+            List<Long> favoriteProperties = favoritesRepository.findFavoritesEntitiesByUserId(filters.getUserId())
+                    .stream().map(fp -> fp.getPropertyId()).toList();
+            filteredList = propertyList.stream().filter(p -> favoriteProperties.contains(p.getPropertyId())).toList();
             propertyList = filteredList;
+        } else {
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getAgencyId()))){
+                filteredList = propertyList.stream().filter(p -> p.getAgencyId().equals(filters.getAgencyId())).toList();
+                propertyList = filteredList;
+            }
         }
 
         List<PropertySummaryDTO> properties = new ArrayList<>();
@@ -163,6 +174,16 @@ public class PropertyService {
             properties.add(new PropertySummaryDTO(property, address, urls));
         }
         return properties;
+    }
+
+    public void updateFavorite(Long userId, Long propertyId) {
+        FavoritesEntity favorite = favoritesRepository.findFavoritesEntityByUserIdAndPropertyId(userId, propertyId);
+        if(favorite == null){
+            favorite = new FavoritesEntity(userId, propertyId);
+            favoritesRepository.save(favorite);
+        }else{
+            favoritesRepository.delete(favorite);
+        }
     }
 
 }
