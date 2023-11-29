@@ -45,7 +45,7 @@ public class UserController {
             return userService.logins(credentials);
         } else if (body != null && body.containsKey(CommonConstants.PARAMETER_EMAIL) && body.containsKey(CommonConstants.PARAMETER_USERID) && body.containsKey(CommonConstants.PARAMETER_NAME) && body.containsKey(CommonConstants.PARAMETER_IMAGE) ) {
             GoogleCredentialsDTO credentials = new GoogleCredentialsDTO(
-                    body.get(CommonConstants.PARAMETER_USERID).toString(), body.get(CommonConstants.PARAMETER_EMAIL).toString(), body.get(CommonConstants.PARAMETER_NAME).toString(), body.get(CommonConstants.PARAMETER_IMAGE).toString());
+                    body.get(CommonConstants.PARAMETER_USERID).toString(), body.get(CommonConstants.PARAMETER_EMAIL).toString(), body.get(CommonConstants.PARAMETER_IMAGE).toString(), body.get(CommonConstants.PARAMETER_NAME).toString());
             return userService.logins(credentials);
         } else {
             throw new ResponseStatusException(
