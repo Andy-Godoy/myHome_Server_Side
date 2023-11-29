@@ -21,6 +21,7 @@ public class PropertySummaryDTO {
     private String propertyNeighbourhood;
     private String propertyCity;
     private String[] propertyImages;
+    private float propertyDistance;
 
     public PropertySummaryDTO(PropertyEntity property, AddressEntity address, String[] urls) {
         this.propertyId = property.getPropertyId();
@@ -35,7 +36,8 @@ public class PropertySummaryDTO {
         this.propertyAddress = address.getAddressName().concat(" ").concat(String.valueOf(address.getAddressNumber()));
         this.propertyNeighbourhood = address.getAddressNeighbourhood();
         this.propertyCity = address.getAddressCity();
-        this.propertyImages= urls;
+        this.propertyImages = urls;
+        this.propertyDistance = 0;
     }
 
 }

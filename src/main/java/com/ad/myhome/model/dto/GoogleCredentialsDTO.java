@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class GoogleCredentialsDTO {
     private String userId;
     private String userEmail;
-    private String userName;
     private String userImage;
+    private String userName;
 }
