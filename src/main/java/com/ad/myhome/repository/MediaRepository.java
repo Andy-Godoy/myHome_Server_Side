@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     List<MediaEntity> findMediaEntitiesByMediaSourceIdAndMediaSourceType(Long mediaSourceId, SourceType mediaSourceType);
+    MediaEntity findMediaEntityByMediaSourceIdAndMediaSourceType(Long mediaSourceId, SourceType mediaSourceType);
 
     void deleteMediaEntitiesByMediaSourceIdAndMediaSourceType(Long mediaSourceId, SourceType mediaSourceType);
 }

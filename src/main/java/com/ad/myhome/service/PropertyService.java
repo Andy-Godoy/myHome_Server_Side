@@ -170,12 +170,14 @@ public class PropertyService {
                     urls[i] = medias.get(i).getMediaUrl();
                 }
             }
+            MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(property.getAgencyId(), SourceType.PROFILE);
 
-            properties.add(new PropertySummaryDTO(property, address, urls));
+            properties.add(new PropertySummaryDTO(property, address, urls, media.getMediaUrl()));
         }
         return properties;
     }
 
+    @Transactional
     public void updateFavorite(Long userId, Long propertyId) {
         FavoritesEntity favorite = favoritesRepository.findFavoritesEntityByUserIdAndPropertyId(userId, propertyId);
         if(favorite == null){
@@ -186,4 +188,16 @@ public class PropertyService {
         }
     }
 
+    @Transactional
+    public void reserveProperty(Long propertyId) {
+        PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
+        if(property == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    CommonConstants.NOTFOUND_PROPERTY_DOESNT_EXISTS
+            );
+        }
+        property.setPropertyStatus("Reservada");
+        propertyRepository.save(property);
+    }
 }

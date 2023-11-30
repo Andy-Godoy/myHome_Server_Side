@@ -101,10 +101,22 @@ public class PropertyController {
         propertyService.updateFavorite(userId, propertyId);
     }
 
+    @PostMapping(value = "/{propertyId}/reservations")
+    public void reserveProperty(
+            @PathVariable("propertyId") Long propertyId) throws ResponseStatusException {
+        if(CommonFunctions.isMissing(propertyId)){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    CommonConstants.BADREQUEST_MISSINGPARAMETER
+            );
+        }
+        propertyService.reserveProperty(propertyId);
+    }
+
     private Boolean isValidProperty(PropertyDTO property){
         return (
             StringUtils.hasText(property.getPropertyType()) &&
-            StringUtils.hasText(property.getPropertyStatus()) &&
+            property.getPropertyStatus() != null &&
             !CommonFunctions.isMissing(property.getPropertyPrice()) &&
             !CommonFunctions.isMissing(property.getPropertyRoomQuantity()) &&
             !CommonFunctions.isMissing(property.getPropertyCoveredM2()) &&

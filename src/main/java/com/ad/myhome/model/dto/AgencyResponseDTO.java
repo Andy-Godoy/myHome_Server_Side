@@ -12,5 +12,6 @@ public class AgencyResponseDTO {
     private Long userId;
     private String agencyName;
     private String agencyEmail;
+    private String agencyImage;
     private Float agencyRating;
 }
