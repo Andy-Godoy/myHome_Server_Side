@@ -26,8 +26,8 @@ public class MediaEntity {
     @Column(name = "mediaurl", nullable = true, length = -1)
     private String mediaUrl;
 
-    public MediaEntity(Long propertyId, SourceType sourceType, String url) {
-        this.mediaSourceId = propertyId;
+    public MediaEntity(Long sourceId, SourceType sourceType, String url) {
+        this.mediaSourceId = sourceId;
         this.mediaSourceType = sourceType;
         this.mediaUrl = url;
     }

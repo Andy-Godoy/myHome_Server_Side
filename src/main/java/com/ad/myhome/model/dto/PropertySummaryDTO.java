@@ -13,6 +13,7 @@ public class PropertySummaryDTO {
 
     private Long propertyId;
     private Long agencyId;
+    private String agencyImage;
     private Integer propertyPrice;
     private Integer propertyDimension;
     private Integer propertyBedroomQuantity;
@@ -23,9 +24,10 @@ public class PropertySummaryDTO {
     private String[] propertyImages;
     private float propertyDistance;
 
-    public PropertySummaryDTO(PropertyEntity property, AddressEntity address, String[] urls) {
+    public PropertySummaryDTO(PropertyEntity property, AddressEntity address, String[] urls, String agencyImage) {
         this.propertyId = property.getPropertyId();
         this.agencyId = property.getAgencyId();
+        this.agencyImage = agencyImage;
         this.propertyPrice = property.getPropertyPrice();
         this.propertyBedroomQuantity = property.getPropertyBedroomQuantity();
         this.propertyDescription = property.getPropertyDescription();

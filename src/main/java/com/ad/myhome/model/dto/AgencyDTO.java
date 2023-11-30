@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AgencyDTO {
     private String agencyName;
     private String agencyEmail;
+    private String agencyImage;
 }
