@@ -11,15 +11,12 @@ public class FiltersDTO {
     private Boolean isFavorite;
     private Long agencyId;
     private Long userId;
-    private Double userLatitude;
-    private Double userLongitude;
-
-    private String localidad; //falta este
-    private String provincia; //falta este
-    private String pais; //falta este
+    private String localidad;
+    private String provincia;
+    private String pais;
     private int cantidadBanios;
     private int cantidadAmbientes;
-    private int cantidadCuartos;
+    private int cantidadCuatros;
     private int precioMax;
     private int precioMin;
     private String[] propertyAmenities;
