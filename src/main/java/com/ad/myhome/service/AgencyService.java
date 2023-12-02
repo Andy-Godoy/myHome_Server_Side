@@ -60,11 +60,11 @@ public class AgencyService {
             );
         }
         MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(agencyId, SourceType.PROFILE);
-        if(StringUtils.hasText(body.getAgencyUrl())){
+        if(StringUtils.hasText(body.getAgencyImage())){
             if(media != null){
-                media.setMediaUrl(body.getAgencyUrl());
+                media.setMediaUrl(body.getAgencyImage());
             } else {
-                media = new MediaEntity(agencyId, SourceType.PROFILE, body.getAgencyUrl());
+                media = new MediaEntity(agencyId, SourceType.PROFILE, body.getAgencyImage());
             }
             mediaRepository.save(media);
         } else {

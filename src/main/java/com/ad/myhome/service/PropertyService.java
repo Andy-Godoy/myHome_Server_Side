@@ -17,6 +17,7 @@ import com.ad.myhome.utils.enums.SourceType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,6 +158,45 @@ public class PropertyService {
                 filteredList = propertyList.stream().filter(p -> p.getAgencyId().equals(filters.getAgencyId())).toList();
                 propertyList = filteredList;
             }
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getCantidadBanios()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyBathroomQuantity().equals(filters.getCantidadBanios())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getCantidadAmbientes()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyRoomQuantity().equals(filters.getCantidadAmbientes())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getCantidadCuartos()))){
+                filteredList = propertyList.stream().filter(p -> (p.getPropertyBedroomQuantity().equals(filters.getCantidadCuartos()))).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getPrecioMin()))){
+                filteredList = propertyList.stream().filter(p -> (p.getPropertyPrice() >= filters.getPrecioMin())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(CommonFunctions.isMissing(filters.getPrecioMax()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyPrice() <= filters.getPrecioMax()).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(!StringUtils.hasText(filters.getPropertyType()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyType().equals(filters.getPropertyType())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(!StringUtils.hasText(filters.getPropertyStatus()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyStatus().equals(filters.getPropertyStatus())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(!StringUtils.hasText(filters.getPropertyAge()))){
+                filteredList = propertyList.stream().filter(p -> p.getPropertyAge().equals(filters.getPropertyAge())).toList();
+                propertyList = filteredList;
+            }
+            if(Boolean.FALSE.equals(filters.getPropertyAmenities()!=null)){
+                for(String amenity : filters.getPropertyAmenities()){
+                    filteredList = propertyList.stream().filter(p -> p.getPropertyAmenities().contains(amenity)).toList();
+                    propertyList = filteredList;
+                }
+            }
+
         }
 
         List<PropertySummaryDTO> properties = new ArrayList<>();
@@ -171,8 +211,9 @@ public class PropertyService {
                 }
             }
             MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(property.getAgencyId(), SourceType.PROFILE);
+            String mediaUrls = (media != null) ? media.getMediaUrl() : "";
 
-            properties.add(new PropertySummaryDTO(property, address, urls, media.getMediaUrl()));
+            properties.add(new PropertySummaryDTO(property, address, urls, mediaUrls));
         }
         return properties;
     }
