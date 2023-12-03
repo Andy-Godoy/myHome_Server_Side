@@ -13,6 +13,7 @@ public class PropertyDTO {
 
     private Long propertyId;
     private Long agencyId;
+    private String agencyImage;
     private String propertyType;
     private String propertyStatus;
     private Integer propertyPrice;
@@ -37,9 +38,10 @@ public class PropertyDTO {
     private AddressDTO propertyAddress;
     private boolean propertyIsFavorite;
 
-    public PropertyDTO(PropertyEntity property, AddressEntity address, String[] urls, boolean isFavorite) {
+    public PropertyDTO(PropertyEntity property, AddressEntity address, String[] urls, boolean isFavorite, String aganecyImage) {
         this.propertyId = property.getPropertyId();
         this.agencyId = property.getAgencyId();
+        this.agencyImage =aganecyImage;
         this.propertyType = property.getPropertyType();
         this.propertyStatus = property.getPropertyStatus();
         this.propertyPrice = property.getPropertyPrice();
