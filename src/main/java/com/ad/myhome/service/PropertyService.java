@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -214,9 +215,34 @@ public class PropertyService {
             MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(property.getAgencyId(), SourceType.PROFILE);
             String mediaUrls = (media != null) ? media.getMediaUrl() : "";
 
-            properties.add(new PropertySummaryDTO(property, address, urls, mediaUrls));
+            PropertySummaryDTO ps = new PropertySummaryDTO(property, address, urls, mediaUrls);
+            ps.setPropertyDistance(Math.sqrt(
+                Math.pow(filters.getUserLatitude()-address.getAddressLatitude(),2) +
+                Math.pow(filters.getUserLongitude()-address.getAddressLongitude(),2)
+            ));
+
+            properties.add(ps);
         }
+        List<PropertySummaryDTO> filteredSummaryList;
+        if(Boolean.TRUE.equals(StringUtils.hasText(filters.getLocalidad()))){
+            filteredSummaryList = properties.stream().filter(p -> p.getPropertyCity().equals(filters.getLocalidad())).toList();
+            properties = filteredSummaryList;
+        }
+        if(Boolean.TRUE.equals(StringUtils.hasText(filters.getProvincia()))){
+            filteredSummaryList = properties.stream().filter(p -> p.getPropertyState().equals(filters.getProvincia())).toList();
+            properties = filteredSummaryList;
+        }
+        if(Boolean.TRUE.equals(StringUtils.hasText(filters.getPais()))){
+            filteredSummaryList = properties.stream().filter(p -> p.getPropertyCountry().equals(filters.getPais())).toList();
+            properties = filteredSummaryList;
+        }
+
+        if(properties.size()>1){
+            properties.sort(Comparator.comparingDouble(PropertySummaryDTO::getPropertyDistance));
+        }
+
         return properties;
+
     }
 
     @Transactional
