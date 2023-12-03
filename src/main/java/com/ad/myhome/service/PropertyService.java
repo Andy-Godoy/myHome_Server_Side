@@ -61,10 +61,10 @@ public class PropertyService {
             }
             mediaRepository.saveAll(propertyImagesList);
         }
-        return new PropertyDTO(property, address, urls);
+        return new PropertyDTO(property, address, urls, false);
     }
 
-    public PropertyDTO getProperty(Long propertyId) {
+    public PropertyDTO getProperty(Long propertyId, Long userId) {
         PropertyEntity property = propertyRepository.findPropertyEntityByPropertyId(propertyId);
         if(property == null){
             throw new ResponseStatusException(
@@ -81,7 +81,9 @@ public class PropertyService {
                 urls[i] = medias.get(i).getMediaUrl();
             }
         }
-        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address, urls);
+        FavoritesEntity favorite = favoritesRepository.findFavoritesEntityByUserIdAndPropertyId(userId, propertyId);
+        boolean isFavorite = (favorite!=null);
+        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address, urls, isFavorite);
     }
 
     @Transactional
@@ -142,7 +144,7 @@ public class PropertyService {
                 mediaRepository.delete(media);
             }
         }
-        return new PropertyDTO(property, address, urls);
+        return new PropertyDTO(property, address, urls, false);
     }
 
     public List<PropertySummaryDTO> getProperties(FiltersDTO filters) {
@@ -190,7 +192,7 @@ public class PropertyService {
                 filteredList = propertyList.stream().filter(p -> p.getPropertyAge().equals(filters.getPropertyAge())).toList();
                 propertyList = filteredList;
             }
-            if(Boolean.FALSE.equals(filters.getPropertyAmenities()!=null)){
+            if(Boolean.TRUE.equals(filters.getPropertyAmenities()!=null)){
                 for(String amenity : filters.getPropertyAmenities()){
                     filteredList = propertyList.stream().filter(p -> p.getPropertyAmenities().contains(amenity)).toList();
                     propertyList = filteredList;

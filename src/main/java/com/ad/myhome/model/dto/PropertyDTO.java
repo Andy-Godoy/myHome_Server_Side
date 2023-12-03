@@ -35,8 +35,9 @@ public class PropertyDTO {
     private Integer propertyUncoveredM2;
     private String[] propertyImages;
     private AddressDTO propertyAddress;
+    private boolean propertyIsFavorite;
 
-    public PropertyDTO(PropertyEntity property, AddressEntity address, String[] urls) {
+    public PropertyDTO(PropertyEntity property, AddressEntity address, String[] urls, boolean isFavorite) {
         this.propertyId = property.getPropertyId();
         this.agencyId = property.getAgencyId();
         this.propertyType = property.getPropertyType();
@@ -61,5 +62,6 @@ public class PropertyDTO {
         this.propertySemiCoveredM2 = property.getPropertySemiCoveredM2();
         this.propertyUncoveredM2 = property.getPropertyUncoveredM2();
         this.propertyAddress = new AddressDTO(address);
+        this.propertyIsFavorite = isFavorite;
     }
 }

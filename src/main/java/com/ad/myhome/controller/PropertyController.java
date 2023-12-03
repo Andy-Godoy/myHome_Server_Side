@@ -51,14 +51,15 @@ public class PropertyController {
 
     @GetMapping(value = "/{propertyId}")
     public PropertyDTO getProperty(
-            @PathVariable("propertyId") Long propertyId) throws ResponseStatusException {
-        if(CommonFunctions.isMissing(propertyId)){
+            @PathVariable("propertyId") Long propertyId,
+            @RequestParam("userId") Long userId) throws ResponseStatusException {
+        if(CommonFunctions.isMissing(propertyId) || CommonFunctions.isMissing(userId)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     CommonConstants.BADREQUEST_MISSINGPARAMETER
             );
         }
-        return propertyService.getProperty(propertyId);
+        return propertyService.getProperty(propertyId, userId);
     }
 
     @PutMapping(value = "/{propertyId}")
