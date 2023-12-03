@@ -265,6 +265,14 @@ public class PropertyService {
                     CommonConstants.NOTFOUND_PROPERTY_DOESNT_EXISTS
             );
         }
+        if(property.getPropertyStatus().equals("Vendida")
+                || property.getPropertyStatus().equals("Alquilada")
+                || property.getPropertyStatus().equals("Reservada")){
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    CommonConstants.FORBIDDEN_PROPERTY_UNAVAILABLE
+            );
+        }
         property.setPropertyStatus("Reservada");
         propertyRepository.save(property);
     }
