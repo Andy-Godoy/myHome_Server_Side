@@ -16,11 +16,12 @@ public class FiltersDTO {
     private String pais;
     private int cantidadBanios;
     private int cantidadAmbientes;
-    private int cantidadCuatros;
+    private int cantidadCuartos;
     private int precioMax;
     private int precioMin;
     private String[] propertyAmenities;
     private String propertyType;
     private String propertyStatus;
     private String propertyAge;
+
 }
