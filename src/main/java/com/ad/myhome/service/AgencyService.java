@@ -31,7 +31,13 @@ public class AgencyService {
         Float agencyRating = reviewRepository.getAverageScoreByAgencyId(agencyId);
         AgencyEntity agency = agencyRepository.findAgencyEntityByAgencyId(agencyId);
         MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(agency.getAgencyId(), SourceType.PROFILE);
-        return new AgencyResponseDTO(agency.getAgencyId(), agency.getUserId(), agency.getAgencyName(), agency.getAgencyEmail(), media.getMediaUrl(), agencyRating);
+        return new AgencyResponseDTO(
+                agency.getAgencyId(),
+                agency.getUserId(),
+                agency.getAgencyName(),
+                agency.getAgencyEmail(),
+                (media==null)?null:media.getMediaUrl(),
+                agencyRating);
     }
 
     public AgencyEntity saveOneAgency(Long userId, AgencyDTO body){
