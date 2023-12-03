@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FiltersDTO {
+
     private Boolean isFavorite;
     private Long agencyId;
     private Long userId;
@@ -23,5 +24,7 @@ public class FiltersDTO {
     private String propertyType;
     private String propertyStatus;
     private String propertyAge;
+    private double userLatitude;
+    private double userLongitude;
 
 }
