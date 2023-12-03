@@ -7,10 +7,7 @@ import com.ad.myhome.model.entity.AddressEntity;
 import com.ad.myhome.model.entity.FavoritesEntity;
 import com.ad.myhome.model.entity.MediaEntity;
 import com.ad.myhome.model.entity.PropertyEntity;
-import com.ad.myhome.repository.AddressRepository;
-import com.ad.myhome.repository.FavoritesRepository;
-import com.ad.myhome.repository.MediaRepository;
-import com.ad.myhome.repository.PropertyRepository;
+import com.ad.myhome.repository.*;
 import com.ad.myhome.utils.common.CommonConstants;
 import com.ad.myhome.utils.common.CommonFunctions;
 import com.ad.myhome.utils.enums.SourceType;
@@ -61,7 +58,7 @@ public class PropertyService {
             }
             mediaRepository.saveAll(propertyImagesList);
         }
-        return new PropertyDTO(property, address, urls, false);
+        return new PropertyDTO(property, address, urls, false, null);
     }
 
     public PropertyDTO getProperty(Long propertyId, Long userId) {
@@ -81,9 +78,11 @@ public class PropertyService {
                 urls[i] = medias.get(i).getMediaUrl();
             }
         }
+        MediaEntity media = mediaRepository.findMediaEntityByMediaSourceIdAndMediaSourceType(property.getAgencyId(), SourceType.PROFILE);
+        String agencyImage = (media!=null) ? media.getMediaUrl() : null;
         FavoritesEntity favorite = favoritesRepository.findFavoritesEntityByUserIdAndPropertyId(userId, propertyId);
         boolean isFavorite = (favorite!=null);
-        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address, urls, isFavorite);
+        return new PropertyDTO(property, (address == null) ? new AddressEntity() : address, urls, isFavorite, agencyImage);
     }
 
     @Transactional
@@ -144,7 +143,7 @@ public class PropertyService {
                 mediaRepository.delete(media);
             }
         }
-        return new PropertyDTO(property, address, urls, false);
+        return new PropertyDTO(property, address, urls, false, null);
     }
 
     public List<PropertySummaryDTO> getProperties(FiltersDTO filters) {
