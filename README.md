@@ -3,13 +3,29 @@ Server-side repo para el TPO de Aplicaciones distribuidas (2do cuatrimestre, 202
 
 ## Descripción
 MyHome es una aplicación de Android que permite a los usuarios administrar propiedades inmobiliarias. 
-Funciones disponibles en esta versión:
+Esto incluye los ABM de usuarios, inmobiliarias y propiedades, asi como tambien las funciones necesarias 
+para gestionar favoritos, realizar reservas y realizar/ver reseñas.
+
+## Historial de Versiones
+### v1.0 - Release inicial
+Este release incluye solo las funciones 
 - Registro de inmobiliaria
 - Reset de contraseña
 - Ingreso como inmobiliaria
 - Creacion de propiedades
 - Visualización de propiedades
 - Visualización Perfil de inmobiliaria
+
+### v2.0 - Release inicial
+Este release incluye solo las funciones 
+- Listar propiedades de un usuario inmobiliaria
+- Listar propiedades para un usuario comun, ordenadas por distancia.
+- Listar propiedades favoritas para un usuario comun
+- Filtrar propiedades
+- Ver detalle de una propiedad
+- Reservar una propiedad
+- Editar una propiedad
+- Ver perfiles de usuario y contraseña
 
 ## IDE
 IntelliJ IDEA 2023.1.2
