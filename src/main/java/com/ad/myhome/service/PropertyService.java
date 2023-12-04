@@ -216,10 +216,7 @@ public class PropertyService {
             String mediaUrls = (media != null) ? media.getMediaUrl() : "";
 
             PropertySummaryDTO ps = new PropertySummaryDTO(property, address, urls, mediaUrls);
-            ps.setPropertyDistance(Math.sqrt(
-                Math.pow(filters.getUserLatitude()-address.getAddressLatitude(),2) +
-                Math.pow(filters.getUserLongitude()-address.getAddressLongitude(),2)
-            ));
+            ps.setPropertyDistance(calcularDistancia(filters.getUserLatitude(), address.getAddressLatitude(), filters.getUserLongitude(), address.getAddressLongitude()));
 
             properties.add(ps);
         }
@@ -243,6 +240,32 @@ public class PropertyService {
 
         return properties;
 
+    }
+
+    private double calcularDistancia(double lat1, double lat2, double lon1, double lon2) {
+
+        double lat1Rad = Math.toRadians(lat1);
+        double lon1Rad = Math.toRadians(lon1);
+        double lat2Rad = Math.toRadians(lat2);
+        double lon2Rad = Math.toRadians(lon2);
+
+        // Calcular las diferencias de latitud y longitud
+        double deltaLat = lat2Rad - lat1Rad;
+        double deltaLon = lon2Rad - lon1Rad;
+
+        // Aplicar la fórmula de la distancia haversina
+        double a = Math.pow(Math.sin(deltaLat / 2), 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.pow(Math.sin(deltaLon / 2), 2);
+
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        // Radio de la Tierra en kilómetros
+        double r = 6371.0;
+
+        // Calcular la distancia
+        double distance = r * c;
+
+        return Double.parseDouble(String.format("%.2f", distance));
     }
 
     @Transactional
